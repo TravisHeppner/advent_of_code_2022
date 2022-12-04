@@ -9,6 +9,7 @@
   (cs/split s #"(\r?\n){2}"))
 
 
+;debug stuff modified from https://gist.github.com/sunilnandihalli/718725
 (defmacro print-and-return
   ([x]
    `(let [x# ~x]
