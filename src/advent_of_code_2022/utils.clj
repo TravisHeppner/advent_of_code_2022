@@ -57,4 +57,20 @@
            (+ 2)
            (- 3)))
 
+(defn new-day []
+  (let [num (->> (io/file "src/advent_of_code_2022/")
+                 file-seq
+                 (keep #(some->> % str (re-find #"day_(\d\d).clj") last))
+                 sort
+                 last
+                 read-string
+                 inc
+                 (format "%02d"))
+        day_contents (slurp "src/advent_of_code_2022/day_xx.clj")]
+    (spit (format "src/advent_of_code_2022/day_%s.clj" num)
+          (cs/replace day_contents #"day(-|_)xx" #(str "day" % num)))
+    (spit (str "resources/day_" num ".txt") "")
+    (spit (str "resources/day_" num "_sample.txt") "")))
+
+
 
