@@ -32,7 +32,7 @@
 
 (defmacro debug-> [ & args]
   "to see the values that are getting passed during the chaining .. it gets printed immediately without
-  waiting for the rest of the chain to execute. Could be usefull in case one of the following functions
+  waiting for the rest of the chain to execute. Could be useful in case one of the following functions
   throws an exception."
   `(with-separator "->"
      (-> ~@(interleave args
@@ -42,7 +42,7 @@
 
 (defmacro debug->> [& args]
   "to see the values that are getting passed during the chaining .. it gets printed immediately without
-  waiting for the rest of the chain to execute. Could be usefull in case one of the following functions
+  waiting for the rest of the chain to execute. Could be useful in case one of the following functions
   throws an exception."
   `(with-separator "->>"
      (->> ~@(interleave args
@@ -57,6 +57,10 @@
            (+ 2)
            (- 3)))
 
+(defn spit-n-git [file contents & options]
+  (apply spit file contents options)
+  (clojure.java.shell/sh "git" "add" file))
+
 (defn new-day []
   (let [num (->> (io/file "src/advent_of_code_2022/")
                  file-seq
@@ -65,12 +69,14 @@
                  last
                  read-string
                  inc
-                 (format "%02d"))
-        day_contents (slurp "src/advent_of_code_2022/day_xx.clj")]
-    (spit (format "src/advent_of_code_2022/day_%s.clj" num)
-          (cs/replace day_contents #"day(-|_)xx" #(str "day" % num)))
-    (spit (str "resources/day_" num ".txt") "")
-    (spit (str "resources/day_" num "_sample.txt") "")))
+                 (format "%02d"))]
+    (spit-n-git
+      (str "src/advent_of_code_2022/day_" num ".clj")
+      (-> (slurp "src/advent_of_code_2022/day_xx.clj")
+          (cs/replace #"day(-|_)xx" (fn [[_ dash]] (str "day" dash num)))))
+    (spit-n-git (str "resources/day_" num ".txt") "")
+    (spit-n-git (str "resources/day_" num "_sample.txt") "")))
+
 
 
 
