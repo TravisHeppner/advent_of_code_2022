@@ -1,10 +1,10 @@
-(ns advent-of-code-2022.day-xx
+(ns advent-of-code-2022.day-07
   (:require
     [clojure.string :as cs]
     [advent-of-code-2022.utils :refer :all]))
 
-(def input (read-prompt "day_xx_sample.txt"))
-;(def input (read-prompt "day_xx.txt"))
+(def input (read-prompt "day_07_sample.txt"))
+;(def input (read-prompt "day_07.txt"))
 
 (defn parse-input [input-string]
   (->> input-string
